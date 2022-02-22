@@ -58,7 +58,7 @@ class FabCar extends Contract {
             }
         ];
 
-        let transId = 1000;
+        global.transId = 1000;
 
         for (let i = 0; i < trans.length; i++, transId++) {
             await ctx.stub.putState('T '+transId, Buffer.from(JSON.stringify(trans[i])));
@@ -67,10 +67,12 @@ class FabCar extends Contract {
         console.info('============= END : Initialize Ledger ===========');
     }
 
-    
-    async writeData(ctx, key, value){
-        await ctx.stub.putState(key,value)
-        return value;
+
+    async writeData(ctx, value){
+        let jsonvalue = JSON.parse(value)
+        await ctx.stub.putState('T '+transId, Buffer.from(JSON.stringify(jsonvalue)))
+        transId++;
+        return Buffer.from(JSON.stringify(jsonvalue));
     }
 
     async readData(ctx, key){
