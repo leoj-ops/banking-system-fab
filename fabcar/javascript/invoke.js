@@ -9,6 +9,7 @@
 const { Gateway, Wallets } = require('fabric-network');
 const fs = require('fs');
 const path = require('path');
+const inquirer = require('inquirer');
 
 async function main() {
     try {
@@ -39,17 +40,49 @@ async function main() {
         // Get the contract from the network.
         const contract = network.getContract('fabcar');
 
-        let trans= {
-            accountno: '182003',
-            otheraccountno: '182040',
-            mode: 'send',
-            balance: 1000,
-            amount: 100,
+        // let trans= {
+        //     accountno: '182003',
+        //     otheraccountno: '182040',
+        //     mode: 'send',
+        //     balance: 1000,
+        //     amount: 100,
+        // }
+
+        
+
+        var questions = [
+        {
+            type: 'input',
+            name: 'accountno',
+            message: "Enter your Account No.:"
+        }, {
+            type: 'input',
+            name: 'otheraccountno',
+            message: "Enter the Other Account No:",
+        }, {
+            type: 'input',
+            name: 'mode',
+            message: "Enter the Mode:",
+        }, {
+            type: 'input',
+            name: 'balance',
+            message: "Enter the Balance:",
+        }, {
+            type: 'input',
+            name: 'amount',
+            message: "Enter the Amount:",
         }
+        ];
+
+        inquirer.prompt(questions).then(answers => {
+        // console.log(JSON.stringify(answers));
+        contract.submitTransaction('writeData',JSON.stringify(answers));
+        console.log('Transaction has been submitted');
+        });
     
 
-        await contract.submitTransaction('writeData',JSON.stringify(trans));
-        console.log('Transaction has been submitted');
+        // await contract.submitTransaction('writeData',JSON.stringify(questions));
+        // console.log('Transaction has been submitted');
 
         // Disconnect from the gateway.
         await gateway.disconnect();
