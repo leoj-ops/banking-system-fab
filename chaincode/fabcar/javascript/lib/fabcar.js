@@ -53,6 +53,24 @@ class FabCar extends Contract {
         console.info('============= END : Initialize Ledger ===========');
     }
 
+    async updateTransaction(ctx, value){
+        let jsonvalue = JSON.parse(value)
+        let accountno = jsonvalue.accountno
+        let otheraccountno = jsonvalue.otheraccountno
+        let amount = jsonvalue.amount
+        
+    }
+
+    async updateAmount(account, amount, user){
+        let result
+        if(user == 1){
+            result = JSON.parse(this.queryAccountNo(account))
+            
+        }
+        else if(user == 2){
+
+        }
+    }
 
     async writeData(ctx, value){
         let jsonvalue = JSON.parse(value)
