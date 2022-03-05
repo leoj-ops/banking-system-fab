@@ -58,26 +58,48 @@ class FabCar extends Contract {
         let accountno = jsonvalue.accountno
         let otheraccountno = jsonvalue.otheraccountno
         let amount = jsonvalue.amount
-        
-    }
+        let balance = jsonvalue.balance
 
-    async updateAmount(account, amount, user){
-        let result
-        if(user == 1){
-            result = JSON.parse(this.queryAccountNo(account))
-            
+        let trans1= {
+            "accountno": accountno,
+            "otheraccountno": otheraccountno,
+            "mode":'send',
+            "balance": balance,
+            "amount": amount,
         }
-        else if(user == 2){
-
-        }
-    }
-
-    async writeData(ctx, value){
-        let jsonvalue = JSON.parse(value)
-        await ctx.stub.putState('T '+transId, Buffer.from(JSON.stringify(jsonvalue)))
+        await ctx.stub.putState('T '+transId, Buffer.from(JSON.stringify(trans1)))
         transId++;
-        return Buffer.from(JSON.stringify(jsonvalue));
+
+        let trans2= {
+            "accountno": otheraccountno,
+            "otheraccountno": accountno,
+            "mode": 'receive',
+            "balance": balance,
+            "amount": amount,
+        }
+        await ctx.stub.putState('T '+transId, Buffer.from(JSON.stringify(trans2)))
+        transId++;
     }
+
+    // async updateAmount(account, amount, user){
+    //     let result
+    //     if(user == 1){
+    //         result = JSON.parse(this.queryAccountNo(account))
+    //         let trans1 = {
+
+    //         }
+    //     }
+    //     else if(user == 2){
+
+    //     }
+    // }
+
+    // async writeData(ctx, value){
+    //     let jsonvalue = JSON.parse(value)
+    //     await ctx.stub.putState('T '+transId, Buffer.from(JSON.stringify(jsonvalue)))
+    //     transId++;
+    //     return Buffer.from(JSON.stringify(jsonvalue));
+    // }
 
     async readData(ctx, key){
         var response = await ctx.stub.getState(key)

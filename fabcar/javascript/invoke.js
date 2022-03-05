@@ -76,7 +76,7 @@ async function main() {
 
         inquirer.prompt(questions).then(answers => {
         // console.log(JSON.stringify(answers));
-        contract.submitTransaction('writeData',JSON.stringify(answers));
+        contract.submitTransaction('updateTransaction',JSON.stringify(answers));
         console.log('Transaction has been submitted');
         });
     
@@ -94,3 +94,4 @@ async function main() {
 }
 
 main();
+
