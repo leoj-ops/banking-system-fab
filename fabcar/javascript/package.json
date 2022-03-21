@@ -17,7 +17,9 @@
     "dependencies": {
         "fabric-ca-client": "^2.2.4",
         "fabric-network": "^2.2.4",
-        "inquirer": "^8.2.0"
+        "inquirer": "^8.2.0",
+        "mongodb": "^4.4.1",
+        "mongoose": "^6.2.4"
     },
     "devDependencies": {
         "chai": "^4.2.0",

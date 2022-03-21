@@ -13,6 +13,28 @@ const inquirer = require('inquirer');
 
 async function main() {
     try {
+        const mongoose = require("mongoose");
+        const url = 'mongodb://127.0.0.1:27017/account-data';
+        mongoose.connect(url)
+        .then(r => {console.log("mongo successful")})
+        .catch(e => {console.log("mongo unsuccessful", e)});
+        
+        const accountSchema = new mongoose.Schema({
+            accno: String,
+            bal: Number,
+          })
+          
+        const Account = mongoose.model('Account', accountSchema)
+          
+        
+        //   Account.find({}).then(result => {
+        //     result.forEach(account => {
+        //       console.log(account)
+        //     })
+        
+        
+               
+
         // load the network configuration
         const ccpPath = path.resolve(__dirname, '..', '..', 'test-network', 'organizations', 'peerOrganizations', 'org1.example.com', 'connection-org1.json');
         let ccp = JSON.parse(fs.readFileSync(ccpPath, 'utf8'));
@@ -74,8 +96,28 @@ async function main() {
         }
         ];
 
+        Account.find({}).then(result => {
+            result.forEach(account => {
+              console.log(account)
+            })
+            mongoose.connection.close()
+          })
+
+        // const accountExists = await Account.exists({accno: accountno})
+        // if(accountExists){
+            
+        // }
+
+        mongoose.connection.close()
+
         inquirer.prompt(questions).then(answers => {
         // console.log(JSON.stringify(answers));
+        const accountExists = await Account.exists({accno: answers.accountno})
+        if(accountExists){
+            
+        }
+
+
         contract.submitTransaction('writeData',JSON.stringify(answers));
         console.log('Transaction has been submitted');
         });
